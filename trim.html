@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Trim Kapal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <a href="/" class="btn btn-link mb-3 text-decoration-none p-0">← Kembali ke Menu</a>
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">🚢 Kalkulator Trim Kapal</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Draf Belakang (Draft Aft) - Meter</label>
+                        <input type="number" id="da" class="form-control" step="0.01" placeholder="Contoh: 5.20">
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Draf Depan (Draft Forward) - Meter</label>
+                        <input type="number" id="df" class="form-control" step="0.01" placeholder="Contoh: 4.80">
+                    </div>
+                    
+                    <button onclick="hitungTrim()" class="btn btn-dark w-100 btn-lg">Hitung Trim</button>
+                    
+                    <div id="resultBox" class="mt-4 p-4 border rounded text-center d-none bg-white">
+                        <span class="text-muted d-block small">NILAI TRIM</span>
+                        <h1 id="nilaiTrim" class="fw-bold text-warning mb-1"></h1>
+                        <h5 id="statusTrim" class="text-secondary"></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function hitungTrim() {
+    const da = document.getElementById('da').value;
+    const df = document.getElementById('df').value;
+
+    const response = await fetch(`/api/hitung-trim?da=${da}&df=${df}`);
+    const data = await response.json();
+
+    if (data.error) {
+        alert(data.error);
+    } else {
+        const resBox = document.getElementById('resultBox');
+        resBox.classList.remove('d-none');
+        document.getElementById('nilaiTrim').innerText = data.trim + " m";
+        document.getElementById('statusTrim').innerText = data.status;
+    }
+}
+</script>
+</body>
+</html>

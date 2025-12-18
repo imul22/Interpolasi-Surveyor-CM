@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Terminal & Tanki</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .section-title { border-left: 5px solid #dc3545; padding-left: 10px; font-weight: bold; margin-bottom: 15px; }
+        .result-card { background: #1e272e; color: #fff; border-radius: 15px; padding: 25px; }
+        .val-highlight { color: #feca57; font-weight: bold; }
+    </style>
+</head>
+<body class="bg-light">
+
+<div class="container py-4">
+    <a href="/" class="btn btn-sm btn-outline-secondary mb-3">← Dashboard Utama</a>
+    
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0 text-center">🛢️ Oil Quantity Measurement (Manual Factors)</h4>
+        </div>
+        <div class="card-body">
+            <h1>SABAR TO MASIH SEMENTARA BIKIN</h1>
+            
+            <!-- <div class="row">
+                <div class="col-md-4">
+                    <h5 class="section-title text-danger">Data Lapangan</h5>
+                    <div class="mb-3">
+                        <label class="form-label small">Tinggi Cairan (Minyak+Air)</label>
+                        <input type="number" id="tinggiCair" class="form-control" step="0.001">
+                    </div>
+                    <div class="mb-3 text-info">
+                        <label class="form-label small">Tinggi Air (Free Water)</label>
+                        <input type="number" id="tinggiAir" class="form-control border-info" step="0.001">
+                    </div>
+                </div>
+
+                <div class="col-md-4 border-start border-end">
+                    <h5 class="section-title text-secondary">Interpolasi Tabel Sounding</h5>
+                    <div class="row g-1 mb-2">
+                        <div class="col-6"><input type="number" id="soundingBawah" class="form-control form-control-sm" placeholder="Snd Bawah"></div>
+                        <div class="col-6"><input type="number" id="volBawah" class="form-control form-control-sm" placeholder="Vol Bawah"></div>
+                    </div>
+                    <div class="row g-1 mb-3">
+                        <div class="col-6"><input type="number" id="soundingAtas" class="form-control form-control-sm" placeholder="Snd Atas"></div>
+                        <div class="col-6"><input type="number" id="volAtas" class="form-control form-control-sm" placeholder="Vol Atas"></div>
+                    </div>
+                    <hr>
+                    <small class="text-muted d-block mb-1">Tabel Sounding Air (Jika Ada):</small>
+                    <div class="row g-1 mb-1">
+                        <div class="col-6"><input type="number" id="soundingAirBawah" class="form-control form-control-sm" placeholder="Snd Air B"></div>
+                        <div class="col-6"><input type="number" id="volAirBawah" class="form-control form-control-sm" placeholder="Vol Air B"></div>
+                    </div>
+                    <div class="row g-1">
+                        <div class="col-6"><input type="number" id="soundingAirAtas" class="form-control form-control-sm" placeholder="Snd Air A"></div>
+                        <div class="col-6"><input type="number" id="volAirAtas" class="form-control form-control-sm" placeholder="Vol Air A"></div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <h5 class="section-title text-primary">Faktor Konversi Manual</h5>
+                    <div class="mb-2">
+                        <label class="form-label small fw-bold">VCF (Table 54)</label>
+                        <input type="number" id="vcfManual" class="form-control border-primary" step="0.00001" value="1.00000">
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small fw-bold">KL to Barrels Factor</label>
+                        <input type="number" id="bblsFactor" class="form-control" step="0.0001" value="6.2898">
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small fw-bold">Density @15 (MT Factor)</label>
+                        <input type="number" id="mtFactor" class="form-control" step="0.0001" value="0.8450">
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small fw-bold">MT to Long Ton Factor</label>
+                        <input type="number" id="ltFactor" class="form-control" step="0.0001" value="0.9842">
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="hitungMinyak()" class="btn btn-danger w-100 btn-lg mt-4">HITUNG KUANTITAS AKHIR</button>
+
+            <div id="resultBox" class="mt-4 d-none">
+                <div class="result-card shadow">
+                    <div class="row text-center g-4">
+                        <div class="col-md-4">
+                            <p class="text-secondary small mb-1">NET KL @15°C</p>
+                            <h2 class="val-highlight" id="resKL"></h2>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="text-secondary small mb-1">BARRELS @60°F</p>
+                            <h2 class="val-highlight" id="resBbls"></h2>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="text-secondary small mb-1">NET OBS VOL (KL)</p>
+                            <h2 id="resNOV"></h2>
+                        </div>
+                        <div class="col-12 border-top pt-3"></div>
+                        <div class="col-md-6">
+                            <p class="text-secondary small mb-1">METRIC TON (M/T)</p>
+                            <h1 class="text-success fw-bold" id="resMT"></h1>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="text-secondary small mb-1">LONG TON (L/T)</p>
+                            <h1 class="text-success fw-bold" id="resLT"></h1>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+        </div>
+    </div>
+</div>
+
+<script>
+async function hitungMinyak() {
+    // Mengambil semua data input
+    const payload = {
+        tinggiCair: document.getElementById('tinggiCair').value,
+        soundingBawah: document.getElementById('soundingBawah').value,
+        volBawah: document.getElementById('volBawah').value,
+        soundingAtas: document.getElementById('soundingAtas').value,
+        volAtas: document.getElementById('volAtas').value,
+        
+        tinggiAir: document.getElementById('tinggiAir').value || 0,
+        soundingAirBawah: document.getElementById('soundingAirBawah').value || 0,
+        volAirBawah: document.getElementById('volAirBawah').value || 0,
+        soundingAirAtas: document.getElementById('soundingAirAtas').value || 0,
+        volAirAtas: document.getElementById('volAirAtas').value || 0,
+
+        vcfManual: document.getElementById('vcfManual').value,
+        bblsFactor: document.getElementById('bblsFactor').value,
+        mtFactor: document.getElementById('mtFactor').value,
+        ltFactor: document.getElementById('ltFactor').value
+    };
+
+    const response = await fetch('/api/hitung-tangki', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+    
+    document.getElementById('resultBox').classList.remove('d-none');
+    document.getElementById('resKL').innerText = data.netKL15;
+    document.getElementById('resBbls').innerText = data.barrels;
+    document.getElementById('resNOV').innerText = data.nov;
+    document.getElementById('resMT').innerText = data.metricTon;
+    document.getElementById('resLT').innerText = data.longTon;
+}
+</script>
+
+</body>
+</html>
